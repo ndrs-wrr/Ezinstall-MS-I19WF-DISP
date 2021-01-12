@@ -1,0 +1,29 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.app.ezinstall_101"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.app.ezinstall_101"
+    },
+    "wifiwizard2": {
+      "PACKAGE_NAME": "com.app.ezinstall_101"
+    },
+    "cordova-open-native-settings": {
+      "PACKAGE_NAME": "com.app.ezinstall_101"
+    }
+  },
+  "dependent_plugins": {
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "com.app.ezinstall_101"
+    }
+  }
+}

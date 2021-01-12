@@ -1,0 +1,72 @@
+/***NDRS-STP, is starter!**/
+body, html {
+
+	/*background: url(images/appbackground.jpg) top left no-repeat;*/
+	/*background: transparent;*/
+	/*background: url(images/appbackground.jpg) top left no-repeat rgba(251, 249, 249, 0.57);*/
+	background-color:#f9f9f9 ;
+}
+/*.ui-overlay-a {background-color: #FE7002;}*/
+.ui-corner-all, 
+.ui-button.ui-corner-all { 
+	-webkit-border-radius:0;
+	border-radius: 0;
+	border: 0;
+}
+.ui-icon {}
+.ui-page-theme-a .ui-button {
+	background-color: #ff923f;
+	border-color: #ff923f;
+	color: white;
+	border: 0;
+	font-size:20px;
+}
+/*.ui-overlay-a {background-color: #FF780F;}*/
+.ui-page-theme-a .ui-button.ui-button-active {
+	background-color: #FF780F;
+	border-color: #FF780F;
+	color: white;
+}
+
+.ui-listview .curvelist {
+	margin: 4px;
+	padding: 10px;
+}
+
+h1 {
+	/*background-color: #FF780F; */
+
+	color: #666666;
+	margin:0;
+	padding: 10px 10px;
+}
+
+h2,h3,h4 { 
+	/*background-color: #e46602; */
+	color: #333;
+	margin:0;
+	padding: 10px 10px;
+}
+
+a.start_bx {
+	margin-top: 20%;
+/*	margin-left: 35%;
+	width: 100px;
+	height: 100px;
+	border-radius: 200px;*/
+	
+}
+a.delicon {
+	background-color: red; 
+	border-radius: 20px;
+}
+
+p.txtdevice{
+	display: inline-block;
+	width: 80%; 
+	float: left;
+	font-size: 100%;
+}
+ul.ui-nodisc-icon #home:after {
+  background-color: #4da6ff;
+}

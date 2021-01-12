@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Setting Position</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="stylesheet" href="view/css/bootstrap.min.css">
+  	<link rel="stylesheet" href="view/dist/css/bootstrap-select.css">
+	<script src="view/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="view/vendor/bootstrap/js/popper.js"></script>
+	<script src="view/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="view/dist/css/bootstrap-select.css">
+	<script src="view/dist/js/bootstrap-select.js"></script>
+  	<link rel="stylesheet" href="view/css/jquery-confirm.css">
+  	<script src="view/js/jquery-confirm.js"></script>
+  	<script src="config/config.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+
+<style type="text/css">
+	
+</style>
+<script type="text/javascript">
+        function onLoad() {
+        	// alert('onload');
+        	$('#loadscn').hide();
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+
+        // device APIs are available
+        //
+        function onDeviceReady() {
+        	// alert('ready');
+        	ConnectToWifi(localStorage.ssid,localStorage.pass);
+        }
+        function turn_wifi_off() {
+            WifiWizard2.setWifiEnabled(false, win, fail);
+        }
+        function win() {
+            console.log("Disabled wifi");
+            location.href = "index.html";
+        }
+        function fail(a) {
+                console.log(a);
+        }
+
+        function open_wifi() {
+			if (window.cordova && window.cordova.plugins.settings) {
+			    console.log('openNativeSettingsTest is active');
+			    window.cordova.plugins.settings.open("wifi", function() {
+			            console.log('opened settings');
+			        },
+			        function () {
+			            console.log('failed to open settings');
+			        }
+			    );
+			} else {
+			    console.log('openNativeSettingsTest is not active!');
+			}
+		}   
+
+		function check_network(value) {
+			var blocks = value.split(".");
+			if(blocks.length == 4){
+				for (var run in blocks) {
+					console.log(blocks[run]);
+					if (blocks[run] >= 0 &&
+						blocks[run] <= 255 &&
+						blocks[run] !== '' &&
+						blocks[run].length <= 3) {
+						check = true;
+					} else {
+						check = false;
+						break;
+					}
+				}
+				return check
+			} else {
+				return false;
+			}
+		}  
+
+		function ConnectToWifi(ssid,pass){
+			console.log("inside ConnectToWifi function");
+			// alert('connecting');
+			WifiWizard2.setWifiEnabled(true,
+			function(){
+				console.log("WiFi is enabled");
+				// alert('success');
+				//var of the SSID
+				ServerSSID = ssid;
+				//var of the password
+				ServerPassword = pass;		
+				// $Uw7i{C6j8@JR|dTWsR(3yRv
+				wifiConfig = WifiWizard2.formatWPAConfig(ServerSSID,ServerPassword);
+
+				WifiWizard2.addNetwork(wifiConfig,
+					//success
+					function(){
+						console.log("addNetwork is a success");
+						console.log("connecting to SSID = " + ServerSSID);
+
+						WifiWizard2.androidConnectNetwork(ServerSSID,
+							//success
+							function(){
+								console.log("Connect to SSID = " + ServerSSID + " is a success");
+								$('.connecting_btn').hide();
+								$('.connected_btn').show();
+							},
+							//fail
+							function(){
+								console.log("Connect to SSID = " + ServerSSID + " is a fail");
+								alert('Please open wifi setting and setup manually');
+								$.alert({
+								    title: 'Connect to WIFI Fail!',
+								    content: 'Please open wifi setting and setup manually',
+								});	
+								$('.connecting_btn').hide();			
+								$(".wifi_setting_detail").show();
+							}
+
+						);
+
+					},
+					//fail
+					function(){
+						console.log("addNetwork FAILED");
+					}
+				);
+
+
+			},
+			function(){
+				// alert('failed');
+				console.log("WiFi enable failed");
+			});
+		}
+
+
+		 $(document).ready(function() {
+		 	// alert('deviceready');
+		 	$('#loadscn').hide();
+
+		 	$(".ssid_ms").val(localStorage.ssid);
+		 	$(".pass_ms").val(localStorage.pass);
+		 	$(".storage_address").val(path_config.ip_wsdl);
+		 	$(".storage_address_path").val(path_config.storage_path);
+		 	$("#rtsc_select").val(http_header);
+
+		 	$('#networkconfig').hide();
+
+		 	// $(".new_ssid").val(ssid.user);
+		 	// $(".new_pass").val(ssid.password);
+
+
+            localStorage.removeItem('new_ssid');
+            localStorage.removeItem('new_pass');
+            localStorage.removeItem('interval');
+            localStorage.removeItem('send_rtsc');
+            localStorage.removeItem('storage_address');
+            localStorage.removeItem('storage_address_path');
+            localStorage.removeItem('wifi_mode');
+            localStorage.removeItem('ipAddress');
+            localStorage.removeItem('subnet');
+            localStorage.removeItem('gateway');
+		 	
+
+		 	$(document).on('click','.ok_btn', function() {
+		 		$('#loadscn').show();
+
+		        var interval = $("#interval_select option:selected").val();
+		        var send_rtsc = $("#rtsc_select" ).val();
+		        var storage_address = $(".storage_address").val();
+		        var storage_address_path = $(".storage_address_path").val();
+		        var new_ssid = $(".new_ssid").val();
+		        var new_pass = $(".new_pass").val();
+		        var wifi_mode = $("#wifi_mode option:selected").val();
+		        var ipAddress = $("#ipAddress").val();
+		        var subnet = $("#subnet").val();
+		        var gateway = $("#gateway").val();
+
+		        localStorage.setItem("new_ssid", new_ssid);
+		        localStorage.setItem("new_pass", new_pass);
+		        localStorage.setItem("interval", interval);
+            	localStorage.setItem("send_rtsc", send_rtsc);
+		        localStorage.setItem("storage_address", storage_address);
+		        localStorage.setItem("storage_address_path", storage_address_path);
+		        localStorage.setItem("wifi_mode", wifi_mode);
+		        localStorage.setItem("ipAddress", ipAddress);
+		        localStorage.setItem("subnet", subnet);
+		        localStorage.setItem("gateway", gateway);
+		        
+		        if(new_ssid.length < 1 || new_pass.length < 1){
+		 			$('#loadscn').hide();
+		        	$.alert({
+					    title: 'Alert!',
+					    content: 'please fill out the form!',
+					});
+		        } else {
+		        	if ((check_network(ipAddress) === false ||
+		        		check_network(subnet) === false ||
+		        		check_network(gateway) === false) && wifi_mode == 2) {
+		 			$('#loadscn').hide();
+				        	$.alert(
+					        	{
+								    title: 'Alert!',
+								    content: 'Format Network is invalid.',
+								}
+							);
+		        	} else {
+		        		alert(new_ssid);
+		        		send_ssid();
+		        	}
+		        }
+		    });
+
+		 	
+		    $(document).on('change','#floor_select', function() {
+			    var selected = $('#floor_select option:selected').text();
+			    console.log(selected);
+			    selected = selected.replace("Fl","");
+			    $(".room_select").hide();
+			    $(".room_selected"+selected).show();
+			    $(".zone_select").hide();
+			    $(".zone_selected"+selected).show();
+			});
+
+		     $(document).on('change','#wifi_mode', function() {
+			     if($('#wifi_mode').val() == 2) {
+			          $('#networkconfig').show(); 
+			     } else {
+			          $('#networkconfig').hide(); 
+			     } 
+			 });
+	
+	    });
+
+		function send_ssid() {
+			console.log('ssid');
+			console.log(localStorage.wifi_mode);
+			var ssid_data  = localStorage.new_ssid;
+			if (localStorage.type == 'MS') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.1.1:7878/config",
+					"method": "POST",
+					"data": "{\"command\": 0, \"value\":\""+ssid_data+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+					// "headers": {"EMU-CMD": "{\"command\": 0, \"value\":\""+ssid_data+"\"}"},
+					"data": "{\"command\": 0, \"value\":\""+ssid_data+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					send_password();
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        } 
+        
+        function send_password() {
+			console.log('pass');
+			var pass_data  = localStorage.new_pass;
+         	if (localStorage.type == 'MS') {
+				var settings = {
+				  "async": true,
+				  "crossDomain": true,
+				  "url": "http://192.168.1.1:7878/config",
+				  "method": "POST",
+				  "data": "{\"command\": 1, \"value\":\""+pass_data+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+					// "headers": {"EMU-CMD": "{\"command\": 1, \"value\":\""+pass_data+"\"}"}	
+				  	"data": "{\"command\": 1, \"value\":\""+pass_data+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					send_interval();
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        }
+
+        function send_interval() {
+			console.log('interval');
+  			if (localStorage.type == 'MS') {
+				var settings = {
+						"async": true,
+						"crossDomain": true,
+						"url": "http://192.168.1.1:7878/config",
+						"method": "POST",
+						"data": "{\"command\":3, \"value\":\""+localStorage.interval+"\"}",
+						error: function(){
+							$('#loadscn').hide();
+						}
+  				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+				  	// "headers": {"EMU-CMD": "{\"command\":3, \"value\":\""+localStorage.interval+"\"}"}
+				  	"data": "{\"command\":3, \"value\":\""+localStorage.interval+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					send_rtsc();
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        }  
+
+        function send_rtsc() {
+			console.log('send_rtsc');
+			if (localStorage.type == 'MS') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.1.1:7878/config",
+					"method": "POST",
+					"data": "{\"command\":16, \"value\":\""+localStorage.send_rtsc+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+				  	// "headers": {"EMU-CMD": "{\"command\":16, \"value\":\""+localStorage.send_rtsc+"\"}"}
+					"data": "{\"command\":16, \"value\":\""+localStorage.send_rtsc+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					send_storage_add();
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        } 
+
+        function send_storage_add() {
+			console.log('storage_Add');
+			var storage_add  = localStorage.storage_address.replace("http://","");
+			// storage_add = storage_add.slice(0, -1);
+			if (localStorage.type == 'MS') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.1.1:7878/config",
+					"method": "POST",
+					"data": "{\"command\": 6, \"value\":\""+storage_add+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+				  	// "headers": {"EMU-CMD": "{\"command\": 6, \"value\":\""+storage_add+"\"}"}
+					"data": "{\"command\": 6, \"value\":\""+storage_add+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					send_storage_path();
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        }
+
+        function send_storage_path() {
+			console.log('storage_path');
+			var storage_path  = localStorage.storage_address_path;
+			if (localStorage.type == 'MS') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.1.1:7878/config",
+					"method": "POST",
+					"data": "{\"command\": 7, \"value\":\""+storage_path+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+				  	// "headers": {"EMU-CMD": "{\"command\": 7, \"value\":\""+storage_path+"\"}"}
+					"data": "{\"command\": 7, \"value\":\""+storage_path+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					send_mode();
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        }   
+
+        function send_mode() {
+			console.log('wifi_mode');
+			if (localStorage.type == 'MS') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.1.1:7878/config",
+					"method": "POST",
+					"data": "{\"command\": 2, \"value\":\""+localStorage.wifi_mode+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+				  	// "headers": {"EMU-CMD": "{\"command\": 2, \"value\":\""+localStorage.wifi_mode+"\"}"}
+					"data": "{\"command\": 2, \"value\":\""+localStorage.wifi_mode+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					if (wifi_mode == 1) {
+						send_reboot();
+					} else {
+						send_ipaddress();
+					}
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        }    
+
+        function send_ipaddress() {
+			console.log('ipaddress');
+			if (localStorage.type == 'MS') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.1.1:7878/config",
+					"method": "POST",
+					"data": "{\"command\": 19, \"value\":\""+localStorage.ipAddress+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+				  	// "headers": {"EMU-CMD": "{\"command\": 19, \"value\":\""+localStorage.ipAddress+"\"}"}
+					"data": "{\"command\": 19, \"value\":\""+localStorage.ipAddress+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					send_subnet();
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        }
+
+        function send_subnet() {
+			console.log('subnet');
+			if (localStorage.type == 'MS') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.1.1:7878/config",
+					"method": "POST",
+					"data": "{\"command\": 20, \"value\":\""+localStorage.subnet+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+				  	// "headers": {"EMU-CMD": "{\"command\": 20, \"value\":\""+localStorage.subnet+"\"}"}
+					"data": "{\"command\": 20, \"value\":\""+localStorage.subnet+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					send_gateway();
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        }
+
+        function send_gateway() {
+			console.log('gateway');
+			if (localStorage.type == 'MS') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.1.1:7878/config",
+					"method": "POST",
+					"data": "{\"command\": 21, \"value\":\""+localStorage.gateway+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+				  	// "headers": {"EMU-CMD": "{\"command\": 21, \"value\":\""+localStorage.gateway+"\"}"}
+					"data": "{\"command\": 21, \"value\":\""+localStorage.gateway+"\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+					send_reboot();
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        }
+
+        function send_reboot() {
+			console.log('mode');
+			if (localStorage.type == 'MS') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.1.1:7878/config",
+					"method": "POST",
+					"data": "{\"command\": 4, \"value\":\"0\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			} else if(localStorage.type == 'EMU') {
+				var settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+				  	// "headers": {"EMU-CMD": "{\"command\": 4, \"value\":\"0\"}"}
+					"data": "{\"command\": 4, \"value\":\"0\"}",
+					error: function(){
+						$('#loadscn').hide();
+					}
+				}
+			}
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				if(response.RSLT == "OK"){
+		 			$('#loadscn').hide();
+					$.alert({
+                        title: 'Complete',
+                        content: 'Device setup complete !',
+                        buttons: {
+                            OK: function () {
+                                location.href = "index.html";
+                            },
+                        }
+                    });
+				} else {
+		 			$('#loadscn').hide();
+				}
+			});
+        } 
+</script>
+<style type="text/css">
+	
+/* Center the loader */
+.loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+</style>
+</head>
+<body  onload="onLoad()">
+	<div id="loadscn" style="position: fixed; width: 100%; height: 100%; background-color: rgba(238, 238, 238, 0.75); z-index: 2000;">
+		<div class="loader" style="z-index: 999"></div>
+	</div>
+	<div class="container">
+		</br>
+		<div class="wifi_setting_detail" style="display: none;">
+			<h2 style="color:#827ffe">Access Point Detail</h2>
+			<hr>
+			<div class="row">
+				<div class="col-xs-4" style="font-size: 20px ;">
+					SSID 
+				</div>
+				<div class="col-xs-8">
+					<input type="text" class="form-control ssid_ms" style="width: 220px;" disabled="disabled" >
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-xs-4" style="font-size: 20px ">
+					Password 
+				</div>
+				<div class="col-xs-8">
+					<input type="text" class="form-control pass_ms" style="width: 220px;" disabled="disabled">
+				</div>
+			</div>
+			</br>
+			<br>
+			<div class="row">
+				<div class="col-xs-12" >
+					<button type="button" class="btn btn-info btn-lg active wifi_setting_btn" onclick="open_wifi()" style="width: 100%;">
+						<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Open wifi setting
+					</button>
+				</div>
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-12" >
+				<button type="button" class="btn btn-primary btn-lg active connecting_btn" style="width: 100%">
+					<img src="view/img/lg.comet-spinner.gif" style="height: 30px"> Connecting to Device's WIFI
+				</button>
+				<button type="button" class="btn btn-success btn-lg active connected_btn" style="width: 100%;display: none">
+					 Device's WIFI is connected
+				</button>
+			</div>
+		</div>
+		</br>
+		<h2 style="color:#827ffe">Setting</h2>
+		<hr>              
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ">
+				Storage 
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control storage_address"  style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ">
+				Storage Path
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control storage_address_path"  style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				SSID 
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control new_ssid" style="width: 220px;" >
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ">
+				Password 
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control new_pass" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ">
+				Interval
+			</div>
+			<div class="col-xs-8">
+				<select id="interval_select" class="selectpicker">
+				  <option value="60000">1 min</option>
+				  <option value="120000">2 min</option>
+				  <option value="180000">3 min</option>
+				  <option value="240000">4 min</option>
+				  <option value="300000">5 min</option>
+				  <option value="360000">6 min</option>
+				  <option value="420000">7 min</option>
+				  <option value="480000">8 min</option>
+				  <option value="540000">9 min</option>
+				  <option value="600000">10 min</option>
+				  <option value="660000">11 min</option>
+				  <option value="720000">12 min</option>
+				  <option value="780000">13 min</option>
+				  <option value="840000">14 min</option>
+				  <option value="900000">15 min</option>
+				</select>
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ">
+				Http Header
+			</div>
+			<div class="col-xs-8">
+				<input id="rtsc_select" type="text" class="form-control" style="width: 220px;" >
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ">
+				Wifi Mode
+			</div>
+			<div class="col-xs-8">
+				<select id="wifi_mode" class="selectpicker">
+				  <option value="1" selected="selected">DHCP</option>
+				  <option value="2">Static IP</option>
+				</select>
+			</div>
+		</div>
+		<br>
+		<div id="networkconfig">
+			<div class="row">
+				<div class="col-xs-4" style="font-size: 20px ">
+					IP Address 
+				</div>
+				<div class="col-xs-8">
+					<input id="ipAddress" type="text" class="form-control" style="width: 220px;" >
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-xs-4" style="font-size: 20px ">
+					Subnet Mask 
+				</div>
+				<div class="col-xs-8">
+					<input id="subnet" type="text" class="form-control new_pass" style="width: 220px;" >
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-xs-4" style="font-size: 20px ">
+					Default Gateway 
+				</div>
+				<div class="col-xs-8">
+					<input id="gateway" type="text" class="form-control new_pass" style="width: 220px;" >
+				</div>
+			</div>
+		</div>
+		<hr>
+		<button type="button" class="btn btn-primary btn-lg active ok_btn" style="float:right;">Submit</button>
+		<br>
+		</div>
+	</div>
+	<br>
+</body>
+</html>

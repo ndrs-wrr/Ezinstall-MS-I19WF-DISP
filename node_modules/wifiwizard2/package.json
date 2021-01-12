@@ -1,0 +1,95 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "wifiwizard2@2.1.1",
+        "scope": null,
+        "escapedName": "wifiwizard2",
+        "name": "wifiwizard2",
+        "rawSpec": "2.1.1",
+        "spec": "2.1.1",
+        "type": "version"
+      },
+      "/home/ndrs-ads/Project Android/EZinstall-101"
+    ]
+  ],
+  "_from": "wifiwizard2@2.1.1",
+  "_id": "wifiwizard2@2.1.1",
+  "_inCache": true,
+  "_location": "/wifiwizard2",
+  "_nodeVersion": "8.4.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/wifiwizard2_2.1.1_1523560891709_0.7317338765542389"
+  },
+  "_npmUser": {
+    "name": "tripflex",
+    "email": "tripflex@gmail.com"
+  },
+  "_npmVersion": "4.6.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "wifiwizard2@2.1.1",
+    "scope": null,
+    "escapedName": "wifiwizard2",
+    "name": "wifiwizard2",
+    "rawSpec": "2.1.1",
+    "spec": "2.1.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/wifiwizard2/-/wifiwizard2-2.1.1.tgz",
+  "_shasum": "f2d0e381306434959f297e9a7b165f7e1f60f9f8",
+  "_shrinkwrap": null,
+  "_spec": "wifiwizard2@2.1.1",
+  "_where": "/home/ndrs-ads/Project Android/EZinstall-101",
+  "author": {
+    "name": "Myles McNamara"
+  },
+  "bugs": {
+    "url": "https://github.com/tripflex/wifiwizard2/issues"
+  },
+  "cordova": {
+    "id": "wifiwizard2",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "dependencies": {},
+  "description": "Cordova WiFi Manager for Android and iOS",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "f2d0e381306434959f297e9a7b165f7e1f60f9f8",
+    "tarball": "https://registry.npmjs.org/wifiwizard2/-/wifiwizard2-2.1.1.tgz",
+    "fileCount": 17,
+    "unpackedSize": 92074
+  },
+  "gitHead": "9662e76e133b55bed49cd15bcc3f0cf2c7b89706",
+  "homepage": "https://github.com/tripflex/wifiwizard2#readme",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "license": "Apache 2.0",
+  "maintainers": [
+    {
+      "name": "tripflex",
+      "email": "tripflex@gmail.com"
+    }
+  ],
+  "name": "wifiwizard2",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tripflex/wifiwizard2.git"
+  },
+  "scripts": {},
+  "version": "2.1.1"
+}

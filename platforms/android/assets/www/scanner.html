@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src * gap: ws: https://ssl.gstatic.com;style-src * 'unsafe-inline' 'self' data: blob:;script-src * 'unsafe-inline' 'unsafe-eval' data: blob:;img-src * data: 'unsafe-inline' 'self' content:;fmedia-src mediastream;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
+        <title>Scanner</title>
+        <link rel="stylesheet" type="text/css" href="view/vendor/bootstrap/css/bootstrap.min.css">
+        <script src="view/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="view/js/jquery.js"></script>
+        <link rel="stylesheet" href="view/css/jquery-confirm.css">
+        <script src="view/js/jquery-confirm.js"></script>
+
+        <script type="text/javascript" src="view/js/soapclient.js"></script>
+        <script type="text/javascript" src="view/js/class.js"></script>
+        <script type="text/javascript" src="view/js/IEEE1888.js"></script>
+
+        <script src="config/config.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript">
+            function onLoad() {
+                document.addEventListener("deviceready", onDeviceReady, false);
+                localStorage.setItem('check_wifi',0)
+            }
+
+            // device APIs are available
+            //
+            function onDeviceReady() {
+                // document.addEventListener("pause", onPause, false);
+                // document.addEventListener("resume", onResume, false);
+                // document.addEventListener("menubutton", onMenuKeyDown, false);
+                // document.addEventListener("backbutton", onBackKeyDown, false);
+                turn_wifi_off();
+
+            }
+
+            // function onPause() {
+            //     // alert('Handle the pause event');
+            // }
+
+            // function onResume() {
+            //     // alert('resume');
+            // }
+
+            // function onMenuKeyDown() {
+            //    alert('Please back again to exit app!');
+            // }
+
+            // function onBackKeyDown() {
+                
+            // }
+            function turn_wifi_off() {
+                WifiWizard2.setWifiEnabled(false, win, fail);
+            }
+            function win() {
+                console.log("Disabled wifi");
+            }
+
+            function ConnectToWifi(){
+                WifiWizard2.startScan(success, fail)
+
+            }
+            function success() {
+                // alert('success');
+                console.log("ConnectToWifi function");
+                setTimeout(function() {
+                                        
+                    WifiWizard2.getScanResults(getlist, fail);
+                }, 1000);
+            }
+
+            function getlist(a) {
+                // alert(localStorage.ssid);
+                var ssid_check = localStorage.ssid;
+                console.log("ifunction");
+                console.log(a);
+                var result_check = 0;
+                for (i in a){
+                    var ssname = a[i].SSID;
+                    console.log(ssname);
+                    if(ssname == ssid_check){
+                        result_check = 1
+                    }
+                }
+                if(result_check != 1){
+                    var num = localStorage.check_wifi;
+                    num = num++;
+                    localStorage.setItem('check_wifi',num);
+                    if(num = 10){
+                        $.alert({
+                            title: 'Alert!',
+                            content: 'Network not available !',
+                            buttons: {
+                                OK: function () {
+                                },
+                            }
+                        });
+                    }
+                    else{
+                        success();
+                    }
+                }
+                
+            }
+            function fail(a) {
+                alert('fail');
+                console.log(a);
+            }
+
+            
+
+            $( document ).ready(function() {
+                // localStorage.clear();
+                localStorage.removeItem('ssid');
+                localStorage.removeItem('pass');
+                localStorage.removeItem('device_type');
+                localStorage.removeItem('device_mac');
+
+            });  
+            function re_scan()
+            {
+                // localStorage.clear();
+                
+                localStorage.removeItem('ssid');
+                localStorage.removeItem('pass');
+                localStorage.removeItem('device_type');
+                localStorage.removeItem('device_mac');
+
+                $('#scan_complete').hide();
+                $('#device_scan').show();
+                $('#device_type').html('');
+                $('#device_mac').html('');
+            }
+
+            function scan()
+            {
+                console.log("result");
+                cordova.plugins.barcodeScanner.scan(
+                    function (result) {
+                        console.log(result);
+                        if(!result.cancelled)
+                        {
+                            if(result.format == "QR_CODE")
+                            {
+                                var data = result.text;
+                                    data = data.replace(/\s/g,'');
+
+                                if (!data == "" ){
+
+                                    var qr_data = data.split(',');
+                                    var device_type = qr_data[0];
+                                    var device_mac = qr_data[1];
+                                    if(device_type.includes('MS') || device_type.includes('EMU')){
+                                        if (device_type.includes('MS')) {
+                                            localStorage.setItem("type", "MS");
+                                        } else if (device_type.includes('EMU')) {
+                                            localStorage.setItem("type", "EMU");
+                                        }
+                                        device_type = "OBT IAQ Sensor"
+                                    }
+                                    else{
+                                        $.alert({
+                                            title: 'Alert!',
+                                            content: "This QR_CODE isn't device detail ,please scan again",
+                                            buttons: {
+                                                OK: function () {
+                                                    re_scan();
+                                                },
+                                            }
+                                        });
+                                    }                               // alert("Data :  "+JSON.stringify(data));
+                                    $('#device_type').html(device_type);
+
+                                    $('#device_mac').html(device_mac);
+                                    var ssid = "obt_"+device_mac;
+                                    var pass_wifi = device_mac[0]+device_mac[1]+device_mac[2]+device_mac[3]+device_mac[8]+device_mac[9]+device_mac[10]+device_mac[11];
+                                    localStorage.setItem("ssid", ssid);
+                                    localStorage.setItem("pass", pass_wifi);
+                                    localStorage.setItem("device_type", device_type);                                    
+                                    localStorage.setItem("device_mac", device_mac);
+
+                                    $('#device_scan').hide();
+                                    $('#scan_complete').show();
+                                    ConnectToWifi();
+                                }
+                                else{
+                                    $.alert({
+                                        title: 'Alert!',
+                                        content: "This QR_CODE isn't device detail ,please scan again",
+                                    });
+                                    $('#device_type').html('');
+                                    $('#device_mac').html('');
+                                }
+
+                            }
+                        }
+                    },
+                    function (error) {
+                        $.alert({
+                            title: 'Alert!',
+                            content: "Scanning failed: " + error,
+                        });
+                        $('#device_type').html('');
+                        $('#device_mac').html('');
+                    }
+               );
+            }
+
+            function go_to_main() {
+                location.href = "list.html";
+            }
+          
+        </script>
+    </head>
+    <body  onload="onLoad()">
+
+        <div class="container">
+            </br>
+             <h2 style="color:#827ffe">Device Detail</h2>
+            <hr>
+            <div>
+                <span>Device Type : </span><span id="device_type"></span>
+            </div>
+            </br>
+            <div>
+                <span>MAC Address : </span><span id="device_mac"></span>
+            </div>
+        </div>
+        <!-- <div id="device_scan" onclick="navigator.vibrate(1000);scan();" style="color: #FFF;font-size: 1.5em;background-color: #827ffe;;position: absolute;top: 48%;width: 100%;text-align: center;padding: 20px 0;">
+            Scan Device
+            navigator.vibrate(500);
+        </div> -->
+        <div id="device_scan" onclick="scan()" style="color: #FFF;font-size: 1.5em;background-color: #827ffe;position: absolute;top: 48%;width: 100%;text-align: center;padding: 20px 0;">
+            Scan Device
+        </div>
+        <div id="scan_complete"  style="color: #FFF;font-size: 1.5em;background-color: #827ffe;position: absolute;top: 48%;width: 100%;text-align: center;padding: 20px 0;display: none;">
+            <div onclick="re_scan();" style="width: 48%;display: inline-block;">Scan Again</div>
+            <div onclick="location.href='setting.html';" id="next_btn" style="width: 48%;display: inline-block;">Next</div>
+        </div>
+    </body>
+</html>

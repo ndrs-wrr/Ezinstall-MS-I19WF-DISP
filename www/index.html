@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>List</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="view/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="view/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="view/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="view/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="view/vendor/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="view/css/util.css">
+	<link rel="stylesheet" type="text/css" href="view/css/main.css">
+<!--===============================================================================================-->
+	<script src="view/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="view/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="view/vendor/bootstrap/js/popper.js"></script>
+	<script src="view/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="view/vendor/select2/select2.min.js"></script>
+<style type="text/css">
+	
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 55px;
+  line-height: 0;
+  border-radius: 15px;
+  position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+}
+
+</style>
+</head>
+<script type="text/javascript">
+	var device_list ;
+	$( document ).ready(function() { 
+        clear_session();show_list();
+        $(document).on('click','.list-group-item',function(){
+	      // $('.nav_list').on('click', function(){
+	        var device = $(this).attr('device');
+			var id = $(this).attr('id');
+			console.log(id,device);
+	        localStorage.setItem("view_mac", id);
+			localStorage.setItem("device_type", device);
+			location.href = "detail.html";
+	      });
+    });
+	// function view_data() {
+	// 	var id = $(this).id;
+	// 	var device = $(this).attr("device"); 
+	// 	console.log(id,device);
+	// 	localStorage.setItem("view_mac", id);
+
+	// 	localStorage.setItem("device_type", device);
+	// 	// location.href = "detail.html";
+	// }
+	function clear_session() {
+		
+        localStorage.removeItem('view_mac');
+        localStorage.removeItem('device_mac');
+        localStorage.removeItem("ssid");
+        localStorage.removeItem("pass");
+        localStorage.removeItem("device_type");
+	}
+	function get_list(){
+		var user ;
+		var toker;
+		var uid = localStorage.uid, gid = localStorage.gid, token = localStorage.token;      
+        $.ajax({ 
+            url: url.check_login+"/"+uid+"/"+gid,
+            type: "GET",
+            headers: { token: token },
+            async: false,
+            dataType: "json"
+        })
+        .error(function(response){
+            console.log(response);
+            location.href = 'log_in.html';
+            localStorage.clear();
+        })
+        .success(function(result) { 
+            if (!result.valid) {
+                alert('session timeout');
+                location.href = 'log_in.html';
+                localStorage.clear();
+            }
+        });
+	}
+	function show_list(){
+		var device_list_data = localStorage.device_list_data;
+	
+			var data_total = device_list_data.split(',');
+			console.log()
+			var html_data = "";
+			var device_type = data_total[0];
+			var device_mac = data_total[1];
+			html_data += '<a class="list-group-item"  id="'+device_mac+'" device="'+device_type+'">'+device_type+' : '+device_mac+'</a>'
+			$('#show_list').append(html_data);		
+
+	}
+</script>
+<body>
+	
+	<div class="container">
+		<div id="show_list" class="list-group">
+		    <!-- <a class="list-group-item" onclick="view_data(this.id);" id="508cb177efea">MS : 508cb177efea</a> -->
+		</div>
+	</div>
+	<button type="button" style="color: #FFF;font-size: 1.5em;background-color: #827ffe;position: absolute;top: 48%;width: 100%;text-align: center;padding: 20px 0;" onclick="location.href = 'scanner.html'">Start</button>
+	
+
+</body>
+</html>

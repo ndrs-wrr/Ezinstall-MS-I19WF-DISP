@@ -1,0 +1,127 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "cordova-open-native-settings@1.5.1",
+        "scope": null,
+        "escapedName": "cordova-open-native-settings",
+        "name": "cordova-open-native-settings",
+        "rawSpec": "1.5.1",
+        "spec": "1.5.1",
+        "type": "version"
+      },
+      "/home/ndrs-ads/Project Android/EZinstall-101"
+    ]
+  ],
+  "_from": "cordova-open-native-settings@1.5.1",
+  "_id": "cordova-open-native-settings@1.5.1",
+  "_inCache": true,
+  "_location": "/cordova-open-native-settings",
+  "_nodeVersion": "9.2.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/cordova-open-native-settings_1.5.1_1524559142174_0.16652450231388527"
+  },
+  "_npmUser": {
+    "name": "guyromb",
+    "email": "admin@gsrweb.net"
+  },
+  "_npmVersion": "5.6.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-open-native-settings@1.5.1",
+    "scope": null,
+    "escapedName": "cordova-open-native-settings",
+    "name": "cordova-open-native-settings",
+    "rawSpec": "1.5.1",
+    "spec": "1.5.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-open-native-settings/-/cordova-open-native-settings-1.5.1.tgz",
+  "_shasum": "63b3f08f995317a8304ab5b156e3a7a4d944088f",
+  "_shrinkwrap": null,
+  "_spec": "cordova-open-native-settings@1.5.1",
+  "_where": "/home/ndrs-ads/Project Android/EZinstall-101",
+  "author": {
+    "name": "Guy Rombaut",
+    "email": "admin@gsrweb.net"
+  },
+  "bugs": {
+    "url": "https://github.com/guyromb/Cordova-open-native-settings/issues"
+  },
+  "contributors": [
+    {
+      "name": "Guy Rombaut",
+      "email": "admin@gsrweb.net",
+      "url": "http://gsrweb.net"
+    },
+    {
+      "name": "unknown"
+    },
+    {
+      "name": "unknown"
+    },
+    {
+      "name": "unknown"
+    },
+    {
+      "name": "unknown"
+    },
+    {
+      "name": "unknown"
+    }
+  ],
+  "cordova": {
+    "id": "cordova-open-native-settings",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "dependencies": {},
+  "description": "Native settings opener for Cordova",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-blHs3ilSQNG+YE4c4qxw6YEmod62gbc/+Y+B0ocYxiTxY2LBgIFsa/fGX1LKN1Hj5y4T2OreBTM7u/mWCBHGWA==",
+    "shasum": "63b3f08f995317a8304ab5b156e3a7a4d944088f",
+    "tarball": "https://registry.npmjs.org/cordova-open-native-settings/-/cordova-open-native-settings-1.5.1.tgz",
+    "fileCount": 8,
+    "unpackedSize": 30206,
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa3u0nCRA9TVsSAnZWagAAdEoP/RmQEkBxweGEPjl/j2JG\nMLheoxGzl5VUvM2mRkuZlAS4uZoZFY/h4tUz/Bp1oG6E9an4fItXQ39mwH0e\nqXEAC+LooAAwKQSqQisZawvNxz3esGs6PsOJLXblj01Ln9ytPdGZGACjTq6w\n09vTzVN5X7v8TNVli0fmiDqY5reRv61cm/OsBh6zoos4PmZO432a/G6vpm/d\nP4xzj6dgskg5UDUuR65ClY358cLGlwgChZzYD8YU/EJYjs0DnW47GJDehdJr\nLO6S/Gp3Yt4SgQdEexaZu8xOzspVdOsolLF1g2GBeCoxKd3V11CtxmaCG0Kj\nTfOK8PjoOM9O7881GuBsJ/wDTi2BlXKwiBBhRx4afpDcDgnWcF6T+TdbpPZB\nkAXS57CCYctAPF9WHhmXKCEhPk6itRkEyEQ/AkTK/Qu77kRG5ikdSNp8G7j0\nvjjhdM/bJzTp8HyYKQ3phx17LAlwetNKckXeZ15Me5pxyladQKsZ0U+B0Zkb\nFNoPIP2ftpFvugkP78mmI7y2WMt8L/OaoVnPTnfAIPWwJRfqu1wfHnIEbDq/\nfWuU2zCTWbyuNM9m+j5gbYnZA+0OnkrzQdwhivO6uC9/5CBIOghdRuAy4WkT\nHtcpUN+4GXBwjmZGJ1F8vLVB079LElUMnokbe4OYMa/cssJtqudltyLMeaPR\n01lK\r\n=vU45\r\n-----END PGP SIGNATURE-----\r\n"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "1.5.0": {
+        "cordova": ">4.0.0"
+      }
+    }
+  },
+  "gitHead": "112e570005e7a23ab1783974e5458846b8321304",
+  "homepage": "https://github.com/guyromb/Cordova-open-native-settings#readme",
+  "keywords": [
+    "native-settings",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "guyromb",
+      "email": "admin@gsrweb.net"
+    }
+  ],
+  "name": "cordova-open-native-settings",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guyromb/Cordova-open-native-settings.git"
+  },
+  "version": "1.5.1"
+}
