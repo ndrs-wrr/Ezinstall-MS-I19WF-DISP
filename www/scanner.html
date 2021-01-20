@@ -17,6 +17,7 @@
         <script type="text/javascript" src="view/js/class.js"></script>
         <script type="text/javascript" src="view/js/IEEE1888.js"></script>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
         <script src="config/config.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript">
@@ -28,29 +29,9 @@
             // device APIs are available
             //
             function onDeviceReady() {
-                // document.addEventListener("pause", onPause, false);
-                // document.addEventListener("resume", onResume, false);
-                // document.addEventListener("menubutton", onMenuKeyDown, false);
-                // document.addEventListener("backbutton", onBackKeyDown, false);
                 turn_wifi_off();
-
             }
 
-            // function onPause() {
-            //     // alert('Handle the pause event');
-            // }
-
-            // function onResume() {
-            //     // alert('resume');
-            // }
-
-            // function onMenuKeyDown() {
-            //    alert('Please back again to exit app!');
-            // }
-
-            // function onBackKeyDown() {
-                
-            // }
             function turn_wifi_off() {
                 WifiWizard2.setWifiEnabled(false, win, fail);
             }
@@ -66,7 +47,6 @@
                 // alert('success');
                 console.log("ConnectToWifi function");
                 setTimeout(function() {
-                                        
                     WifiWizard2.getScanResults(getlist, fail);
                 }, 1000);
             }
@@ -105,11 +85,20 @@
                 
             }
             function fail(a) {
-                alert('fail');
-                console.log(a);
+                // alert('fail');
+                console.log("fail: " + a);
             }
 
-            
+            function encrypt(message = '', key = '', iv = ''){
+                var message = CryptoJS.AES.encrypt(message, key, { iv: iv });
+                return message.toString();
+            }
+            function decrypt(message = '', key = '', iv = ''){
+                var code = CryptoJS.AES.decrypt(message, key, { iv: iv });
+                var decryptedMessage = code.toString(CryptoJS.enc.Utf8);
+
+                return decryptedMessage;
+            }
 
             $( document ).ready(function() {
                 // localStorage.clear();
@@ -117,16 +106,18 @@
                 localStorage.removeItem('pass');
                 localStorage.removeItem('device_type');
                 localStorage.removeItem('device_mac');
+                localStorage.removeItem("storage_address");
+                localStorage.removeItem('prefix');
 
             });  
-            function re_scan()
-            {
+            function re_scan() {
                 // localStorage.clear();
-                
                 localStorage.removeItem('ssid');
                 localStorage.removeItem('pass');
                 localStorage.removeItem('device_type');
                 localStorage.removeItem('device_mac');
+                localStorage.removeItem("storage_address");
+                localStorage.removeItem('prefix');
 
                 $('#scan_complete').hide();
                 $('#device_scan').show();
@@ -134,24 +125,28 @@
                 $('#device_mac').html('');
             }
 
-            function scan()
-            {
+            function scan() {
                 console.log("result");
                 cordova.plugins.barcodeScanner.scan(
                     function (result) {
                         console.log(result);
+
                         if(!result.cancelled)
                         {
                             if(result.format == "QR_CODE")
                             {
                                 var data = result.text;
                                     data = data.replace(/\s/g,'');
+                                    // data = JSON.parse(data);
 
                                 if (!data == "" ){
 
+                                    console.log("data : " + data);
+
                                     var qr_data = data.split(',');
                                     var device_type = qr_data[0];
-                                    var device_mac = qr_data[1];
+                                    var device_mac = qr_data[2];
+                                    
                                     if(device_type.includes('MS') || device_type.includes('EMU')){
                                         if (device_type.includes('MS')) {
                                             localStorage.setItem("type", "MS");
@@ -172,14 +167,27 @@
                                         });
                                     }                               // alert("Data :  "+JSON.stringify(data));
                                     $('#device_type').html(device_type);
-
                                     $('#device_mac').html(device_mac);
+
+                                    var data_s = qr_data[3];
+                                    console.log("data_s : " + data_s);
+                                    var key_s = CryptoJS.enc.Hex.parse("47A8D3DDCAE63D195EB9A3D408B44A6D");
+                                    var iv_s = CryptoJS.enc.Hex.parse("7B78AC01F50875E34A407ABC17C03BCB");
+                                    // console.log(encrypt("hello", key_s, iv_s));
+                                    var decr = decrypt(data_s, key_s, iv_s);
+                                    console.log(decr);
+                                    var decr_data = decr.split(',');
+                                    var storage_addr = decr_data[0];
+                                    var prefix = decr_data[1];
+
                                     var ssid = "obt_"+device_mac;
                                     var pass_wifi = device_mac[0]+device_mac[1]+device_mac[2]+device_mac[3]+device_mac[8]+device_mac[9]+device_mac[10]+device_mac[11];
                                     localStorage.setItem("ssid", ssid);
                                     localStorage.setItem("pass", pass_wifi);
                                     localStorage.setItem("device_type", device_type);                                    
                                     localStorage.setItem("device_mac", device_mac);
+                                    localStorage.setItem("storage_address", storage_addr);
+                                    localStorage.setItem("prefix", prefix);
 
                                     $('#device_scan').hide();
                                     $('#scan_complete').show();

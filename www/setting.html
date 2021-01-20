@@ -144,26 +144,53 @@
 
 		 	$(".ssid_ms").val(localStorage.ssid);
 		 	$(".pass_ms").val(localStorage.pass);
-		 	$(".storage_address").val(path_config.ip_wsdl);
+		 	$(".storage_address").val(localStorage.storage);
 		 	$(".storage_address_path").val(path_config.storage_path);
 		 	$("#rtsc_select").val(http_header);
 
 		 	$('#networkconfig').hide();
 
-		 	// $(".new_ssid").val(ssid.user);
-		 	// $(".new_pass").val(ssid.password);
+			// $("#ipAddress").val(localStorage.ipAddress);
+			// $("#subnet").val(localStorage.subnet);
+			// $("#gateway").val(localStorage.gateway);
 
+			// $(".ftpServ").val(localStorage.ftpServ);
+			// $(".ftpPort").val(localStorage.ftpPort);
+			// $(".ftpUser").val(localStorage.ftpUser);
+			// $(".ftpPwd").val(localStorage.ftpPwd);
+
+			// $(".otaAuto").val(localStorage.otaAuto);
+			// $(".otaUpdate").val(localStorage.otaUpdate);
+
+			// $(".ntpServ").val(localStorage.ntpServ);
+
+			// $(".mqttServ").val(localStorage.mqttServ);
+			// $(".mqttPort").val(localStorage.mqttPort);
+			// $(".mqttUser").val(localStorage.mqttUser);
+			// $(".mqttPwd").val(localStorage.mqttPwd);
+
+			$(".prefix").val(localStorage.prefix);
 
             localStorage.removeItem('new_ssid');
             localStorage.removeItem('new_pass');
             localStorage.removeItem('interval');
             localStorage.removeItem('send_rtsc');
-            localStorage.removeItem('storage_address');
             localStorage.removeItem('storage_address_path');
             localStorage.removeItem('wifi_mode');
-            localStorage.removeItem('ipAddress');
-            localStorage.removeItem('subnet');
-            localStorage.removeItem('gateway');
+            // localStorage.removeItem('ipAddress');
+            // localStorage.removeItem('subnet');
+			// localStorage.removeItem('gateway');
+			// localStorage.removeItem('ftpServ');
+            // localStorage.removeItem('ftpPort');
+            // localStorage.removeItem('ftpUser');
+			// localStorage.removeItem('ftpPwd');
+			// localStorage.removeItem('otaAuto');
+			// localStorage.removeItem('otaUpdate');
+			// localStorage.removeItem('ntpServ');
+            // localStorage.removeItem('mqttServ');
+            // localStorage.removeItem('mqttPort');
+			// localStorage.removeItem('mqttUser');
+			// localStorage.removeItem('mqttPwd');
 		 	
 
 		 	$(document).on('click','.ok_btn', function() {
@@ -176,9 +203,22 @@
 		        var new_ssid = $(".new_ssid").val();
 		        var new_pass = $(".new_pass").val();
 		        var wifi_mode = $("#wifi_mode option:selected").val();
-		        var ipAddress = $("#ipAddress").val();
-		        var subnet = $("#subnet").val();
-		        var gateway = $("#gateway").val();
+		        // var ipAddress = $("#ipAddress").val();
+		        // var subnet = $("#subnet").val();
+				// var gateway = $("#gateway").val();
+				// var ftpServ = $(".ftpServ").val();
+		        // var ftpPort = $(".ftpPort").val();
+		        // var ftpUser = $(".ftpUser").val();
+				// var ftpPwd = $(".ftpPwd").val();
+				// var otaAuto = $(".otaAuto").val();
+				// var otaUpdate = $(".otaUpdate").val();
+				// var ntpServ = $(".ntpServ").val();
+		        // var mqttServ = $(".mqttServ").val();
+		        // var mqttPort = $(".mqttPort").val();
+				// var mqttUser = $(".mqttUser").val();
+				// var mqttPwd = $(".mqttPwd").val();
+				var prefix = $(".prefix").val();
+				
 
 		        localStorage.setItem("new_ssid", new_ssid);
 		        localStorage.setItem("new_pass", new_pass);
@@ -187,9 +227,21 @@
 		        localStorage.setItem("storage_address", storage_address);
 		        localStorage.setItem("storage_address_path", storage_address_path);
 		        localStorage.setItem("wifi_mode", wifi_mode);
-		        localStorage.setItem("ipAddress", ipAddress);
-		        localStorage.setItem("subnet", subnet);
-		        localStorage.setItem("gateway", gateway);
+		        // localStorage.setItem("ipAddress", ipAddress);
+		        // localStorage.setItem("subnet", subnet);
+				// localStorage.setItem("gateway", gateway);
+				// localStorage.setItem("ftpServ", ftpServ);
+				// localStorage.setItem("ftpPort", ftpPort);
+				// localStorage.setItem("ftpUser", ftpUser);
+				// localStorage.setItem("ftpPwd", ftpPwd);
+				// localStorage.setItem("otaAuto", otaAuto);
+				// localStorage.setItem("otaUpdate", otaUpdate);
+				// localStorage.setItem("ntpServ", ntpServ);
+				// localStorage.setItem("mqttServ", mqttServ);
+				// localStorage.setItem("mqttPort", mqttPort);
+				// localStorage.setItem("mqttUser", mqttUser);
+				// localStorage.setItem("mqttPwd", mqttPwd);
+				localStorage.setItem("prefix", prefix);
 		        
 		        if(new_ssid.length < 1 || new_pass.length < 1){
 		 			$('#loadscn').hide();
@@ -213,8 +265,7 @@
 		        		send_ssid();
 		        	}
 		        }
-		    });
-
+			});
 		 	
 		    $(document).on('change','#floor_select', function() {
 			    var selected = $('#floor_select option:selected').text();
@@ -234,7 +285,109 @@
 			     } 
 			 });
 	
-	    });
+		});
+		
+		function re_scan() {
+			// localStorage.clear();
+			localStorage.removeItem('ssid');
+			localStorage.removeItem('pass');
+
+			$('#scan_complete').hide();
+			$('#device_scan').show();
+		}
+
+		function scan() {
+			console.log("result");
+			cordova.plugins.barcodeScanner.scan(
+				function (result) {
+					console.log(result);
+					if(!result.cancelled)
+					{
+						if(result.format == "QR_CODE")
+						{
+							var data = result.text;
+								data = data.replace(/\s/g,'');
+								data = JSON.parse(data);
+
+							if (!data == "" ){
+								var device_ssid = data.ssid;
+								var device_ssid_pwd = data.ssid_pwd;
+								localStorage.setItem("new_ssid", device_ssid);
+								localStorage.setItem("new_ssid_pwd", device_ssid_pwd);
+								var device_mac = localStorage.device_mac;
+								var ssid = "obt_" + device_mac;
+								var pass_wifi = device_mac[0]+device_mac[1]+device_mac[2]+device_mac[3]+device_mac[8]+device_mac[9]+device_mac[10]+device_mac[11];
+								localStorage.setItem("ssid", ssid);
+								localStorage.setItem("pass", pass_wifi);
+								// localStorage.setItem("ipAddress", data.ipAddress);
+								// localStorage.setItem("subnet", data.subnet);
+								// localStorage.setItem("gateway", data.gateway);
+								// localStorage.setItem("ftpServ", data.ftpServ);
+								// localStorage.setItem("ftpPort", data.ftpPort);
+								// localStorage.setItem("ftpUser", data.ftpUser);
+								// localStorage.setItem("ftpPwd", data.ftpPwd);
+								// localStorage.setItem("otaAuto", data.otaAuto);
+								// localStorage.setItem("otaUpdate", data.otaUpdate);
+								// localStorage.setItem("ntpServ", data.ntpServ);
+								// localStorage.setItem("mqttServ", data.mqttServ);
+								// localStorage.setItem("mqttPort", data.mqttPort);
+								// localStorage.setItem("mqttUser", data.mqttUser);
+								// localStorage.setItem("mqttPwd", data.mqttPwd);
+								localStorage.setItem("prefix", localStorage.prefix);
+
+								$(".ssid_ms").val(localStorage.ssid);
+								$(".pass_ms").val(localStorage.pass);
+								$(".storage_address").val(localStorage.storage);
+								$(".storage_address_path").val(path_config.storage_path);
+								$(".new_ssid").val(localStorage.new_ssid);
+								$(".new_pass").val(localStorage.new_ssid_pwd);
+								$("#rtsc_select").val(http_header);
+
+								$('#networkconfig').hide();
+
+								// $("#ipAddress").val(localStorage.ipAddress);
+								// $("#subnet").val(localStorage.subnet);
+								// $("#gateway").val(localStorage.gateway);
+
+								// $(".ftpServ").val(localStorage.ftpServ);
+								// $(".ftpPort").val(localStorage.ftpPort);
+								// $(".ftpUser").val(localStorage.ftpUser);
+								// $(".ftpPwd").val(localStorage.ftpPwd);
+
+								// $(".otaAuto").val(localStorage.otaAuto);
+								// $(".otaUpdate").val(localStorage.otaUpdate);
+
+								// $(".ntpServ").val(localStorage.ntpServ);
+
+								// $(".mqttServ").val(localStorage.mqttServ);
+								// $(".mqttPort").val(localStorage.mqttPort);
+								// $(".mqttUser").val(localStorage.mqttUser);
+								// $(".mqttPwd").val(localStorage.mqttPwd);
+
+								$(".prefix").val(localStorage.prefix);
+
+								$('#device_scan').hide();
+								$('#scan_complete').show();
+								ConnectToWifi();
+							}
+							else{
+								$.alert({
+									title: 'Alert!',
+									content: "This QR_CODE isn't device detail ,please scan again",
+								});
+							}
+
+						}
+					}
+				},
+				function (error) {
+					$.alert({
+						title: 'Alert!',
+						content: "Scanning failed: " + error,
+					});
+				}
+			);
+		}
 
 		function send_ssid() {
 			console.log('ssid');
@@ -760,7 +913,7 @@
 				<input type="text" class="form-control new_ssid" style="width: 220px;" >
 			</div>
 		</div>
-		<br>
+		</br>
 		<div class="row">
 			<div class="col-xs-4" style="font-size: 20px ">
 				Password 
@@ -803,7 +956,7 @@
 				<input id="rtsc_select" type="text" class="form-control" style="width: 220px;" >
 			</div>
 		</div>
-		<br>
+		</br>
 		<div class="row">
 			<div class="col-xs-4" style="font-size: 20px ">
 				Wifi Mode
@@ -815,7 +968,7 @@
 				</select>
 			</div>
 		</div>
-		<br>
+		</br>
 		<div id="networkconfig">
 			<div class="row">
 				<div class="col-xs-4" style="font-size: 20px ">
@@ -831,7 +984,7 @@
 					Subnet Mask 
 				</div>
 				<div class="col-xs-8">
-					<input id="subnet" type="text" class="form-control new_pass" style="width: 220px;" >
+					<input id="subnet" type="text" class="form-control" style="width: 220px;" >
 				</div>
 			</div>
 			<br>
@@ -840,13 +993,123 @@
 					Default Gateway 
 				</div>
 				<div class="col-xs-8">
-					<input id="gateway" type="text" class="form-control new_pass" style="width: 220px;" >
+					<input id="gateway" type="text" class="form-control" style="width: 220px;" >
 				</div>
 			</div>
 		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				FTP Server 
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control ftpServ" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				FTP Port 
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control ftpPort" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				FTP User 
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control ftpUser" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				FTP Password
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control ftpPwd" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				OTA Auto Update
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control otaAuto" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				OTA Update
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control otaUpdate" style="width: 220px;" >
+			</div>
+		</div>
+
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				NTP Server
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control ntpServ" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				MQTT Server
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control mqttServ" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				MQTT Port
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control mqttPort" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				MQTT User
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control mqttUser" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				MQTT Password
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control mqttPwd" style="width: 220px;" >
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-4" style="font-size: 20px ;">
+				Prefix
+			</div>
+			<div class="col-xs-8">
+				<input type="text" class="form-control prefix" style="width: 220px;" >
+			</div>
+		</div>
 		<hr>
-		<button type="button" class="btn btn-primary btn-lg active ok_btn" style="float:right;">Submit</button>
-		<br>
+		<button type="button" class="btn btn-primary btn-lg active scan_btn" onclick="scan()" style="float: left;">Scan Device</button>
+		<button type="button" class="btn btn-primary btn-lg active ok_btn" style="float: right;">Submit</button>
+		</br>
 		</div>
 	</div>
 	<br>
