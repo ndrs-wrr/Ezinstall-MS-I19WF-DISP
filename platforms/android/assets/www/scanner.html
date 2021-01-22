@@ -40,7 +40,7 @@
             }
 
             function ConnectToWifi(){
-                WifiWizard2.startScan(success, fail)
+                WifiWizard2.startScan(success, fail);
 
             }
             function success() {
@@ -52,8 +52,8 @@
             }
 
             function getlist(a) {
-                // alert(localStorage.ssid);
-                var ssid_check = localStorage.ssid;
+                // alert(localStorage.ssid_access_point);
+                var ssid_check = localStorage.ssid_access_point;
                 console.log("ifunction");
                 console.log(a);
                 var result_check = 0;
@@ -82,7 +82,6 @@
                         success();
                     }
                 }
-                
             }
             function fail(a) {
                 // alert('fail');
@@ -102,9 +101,10 @@
 
             $( document ).ready(function() {
                 // localStorage.clear();
-                localStorage.removeItem('ssid');
-                localStorage.removeItem('pass');
+                localStorage.removeItem('ssid_access_point');
+                localStorage.removeItem('pass_access_point');
                 localStorage.removeItem('device_type');
+                localStorage.removeItem('serial_num');
                 localStorage.removeItem('device_mac');
                 localStorage.removeItem("storage_address");
                 localStorage.removeItem('prefix');
@@ -112,9 +112,10 @@
             });  
             function re_scan() {
                 // localStorage.clear();
-                localStorage.removeItem('ssid');
-                localStorage.removeItem('pass');
+                localStorage.removeItem('ssid_access_point');
+                localStorage.removeItem('pass_access_point');
                 localStorage.removeItem('device_type');
+                localStorage.removeItem('serial_num');
                 localStorage.removeItem('device_mac');
                 localStorage.removeItem("storage_address");
                 localStorage.removeItem('prefix');
@@ -145,6 +146,7 @@
 
                                     var qr_data = data.split(',');
                                     var device_type = qr_data[0];
+                                    var serial_num = qr_data[1];
                                     var device_mac = qr_data[2];
                                     
                                     if(device_type.includes('MS') || device_type.includes('EMU')){
@@ -153,7 +155,7 @@
                                         } else if (device_type.includes('EMU')) {
                                             localStorage.setItem("type", "EMU");
                                         }
-                                        device_type = "OBT IAQ Sensor"
+                                        device_type = "IAQ Sensor"
                                     }
                                     else{
                                         $.alert({
@@ -173,6 +175,10 @@
                                     console.log("data_s : " + data_s);
                                     var key_s = CryptoJS.enc.Hex.parse("47A8D3DDCAE63D195EB9A3D408B44A6D");
                                     var iv_s = CryptoJS.enc.Hex.parse("7B78AC01F50875E34A407ABC17C03BCB");
+
+                                    // var key_s = CryptoJS.enc.Hex.parse("C5265D31B510429FE2B2C9346AA759CB");
+                                    // var iv_s = CryptoJS.enc.Hex.parse("1DF8A9A8E4CC3A038EB0D08BF5F53532");
+
                                     // console.log(encrypt("hello", key_s, iv_s));
                                     var decr = decrypt(data_s, key_s, iv_s);
                                     console.log(decr);
@@ -180,11 +186,12 @@
                                     var storage_addr = decr_data[0];
                                     var prefix = decr_data[1];
 
-                                    var ssid = "obt_"+device_mac;
+                                    var ssid = "cusc_" + device_mac;
                                     var pass_wifi = device_mac[0]+device_mac[1]+device_mac[2]+device_mac[3]+device_mac[8]+device_mac[9]+device_mac[10]+device_mac[11];
-                                    localStorage.setItem("ssid", ssid);
-                                    localStorage.setItem("pass", pass_wifi);
-                                    localStorage.setItem("device_type", device_type);                                    
+                                    localStorage.setItem("ssid_access_point", ssid);
+                                    localStorage.setItem("pass_access_point", pass_wifi);
+                                    localStorage.setItem("device_type", device_type);
+                                    localStorage.setItem("serial_num", serial_num);                              
                                     localStorage.setItem("device_mac", device_mac);
                                     localStorage.setItem("storage_address", storage_addr);
                                     localStorage.setItem("prefix", prefix);
