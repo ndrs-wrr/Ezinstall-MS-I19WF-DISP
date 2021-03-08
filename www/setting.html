@@ -285,9 +285,12 @@
 								data = JSON.parse(data);
 
 							if (!data == "" ){
+								// console.log("data : ",data);
 								localStorage.setItem("ssid_wifi", data.ssid);
 								localStorage.setItem("ssid_pwd_wifi", data.ssid_pass);
+								localStorage.setItem("storage_address", data.str_addr);
 								localStorage.setItem("storage_address_path", data.str_path);
+								localStorage.setItem("prefix", data.point_prefix);
 								localStorage.setItem("ipAddress", data.ipAddress);
 								localStorage.setItem("subnet", data.subnet);
 								localStorage.setItem("gateway", data.gateway);
@@ -308,7 +311,7 @@
 								$(".ssid_wifi").val(localStorage.ssid_wifi);
 								$(".ssid_pwd_wifi").val(localStorage.ssid_pwd_wifi);
 								// $("#rtsc_select").val(http_header);
-								$(".storage_address").val(localStorage.storage);
+								$(".storage_address").val(localStorage.storage_address);
 								$(".storage_address_path").val(localStorage.storage_address_path);
 								$(".prefix").val(localStorage.prefix);
 								$("#ipAddress").val(localStorage.ipAddress);
