@@ -352,15 +352,16 @@
 
 		function send_ssid() {
 			console.log('ssid');
-			console.log(localStorage.wifi_mode);
 			var ssid_data  = localStorage.ssid_wifi;
+			console.log(ssid_data);
 			if (localStorage.type == 'MS') {
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 0, \"value\":\""+ssid_data+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 0, "value": ssid_data}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -378,6 +379,7 @@
 					}
 				}
 			}
+			console.log(settings);
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
@@ -393,11 +395,12 @@
 			var pass_data  = localStorage.ssid_pwd_wifi;
          	if (localStorage.type == 'MS') {
 				var settings = {
-				  "async": true,
-				  "crossDomain": true,
-				  "url": "http://192.168.1.1:7878/config",
-				  "method": "POST",
-				  "data": "{\"command\": 1, \"value\":\""+pass_data+"\"}",
+				  	"async": true,
+				  	"crossDomain": true,
+				  	"url": "http://192.168.4.1:7878/config",
+				  	"method": "POST",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 1, "value": pass_data}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -429,14 +432,15 @@
 			console.log('interval');
   			if (localStorage.type == 'MS') {
 				var settings = {
-						"async": true,
-						"crossDomain": true,
-						"url": "http://192.168.1.1:7878/config",
-						"method": "POST",
-						"data": "{\"command\":3, \"value\":\""+localStorage.interval+"\"}",
-						error: function(){
-							$('#loadscn').hide();
-						}
+					"async": true,
+					"crossDomain": true,
+					"url": "http://192.168.4.1:7878/config",
+					"method": "POST",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 3, "value": localStorage.interval}),
+					error: function(){
+						$('#loadscn').hide();
+					}
   				}
 			} else if(localStorage.type == 'EMU') {
 				var settings = {
@@ -468,7 +472,7 @@
 		// 		var settings = {
 		// 			"async": true,
 		// 			"crossDomain": true,
-		// 			"url": "http://192.168.1.1:7878/config",
+		// 			"url": "http://192.168.4.1:7878/config",
 		// 			"method": "POST",
 		// 			"data": "{\"command\":16, \"value\":\""+localStorage.send_rtsc+"\"}",
 		// 			error: function(){
@@ -501,14 +505,14 @@
         function send_storage_add() {
 			console.log('storage_Add');
 			var storage_add  = localStorage.storage_address.replace("http://","");
-			// storage_add = storage_add.slice(0, -1);
 			if (localStorage.type == 'MS') {
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 6, \"value\":\""+storage_add+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 6, "value": storage_add}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -543,9 +547,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 7, \"value\":\""+storage_path+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 7, "value": storage_path}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -580,9 +585,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 5, \"value\":\""+prefix+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 5, "value": prefix}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -616,9 +622,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 2, \"value\":\""+localStorage.wifi_mode+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 2, "value": localStorage.wifi_mode}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -638,6 +645,8 @@
 			}
 			$.ajax(settings).done(function (response) {
 				console.log(response);
+				var wifi_mode = $("#wifi_mode option:selected").val();
+				console.log(wifi_mode);
 				if(response.RSLT == "OK"){
 					if (wifi_mode == 1) {
 						send_reboot();
@@ -656,9 +665,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 19, \"value\":\""+localStorage.ipAddress+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 19, "value": localStorage.ipAddress}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -692,9 +702,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 20, \"value\":\""+localStorage.subnet+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 20, "value": localStorage.subnet}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -728,9 +739,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 21, \"value\":\""+localStorage.gateway+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 21, "value": localStorage.gateway}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -764,9 +776,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 18, \"value\":\""+localStorage.ntpServ+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 18, "value": localStorage.ntpServ}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -800,9 +813,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 8, \"value\":\""+localStorage.ftpServ+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 8, "value": localStorage.ftpServ}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -836,9 +850,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 9, \"value\":\""+localStorage.ftpPort+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 9, "value": localStorage.ftpPort}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -872,9 +887,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 10, \"value\":\""+localStorage.ftpUser+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 10, "value": localStorage.ftpUser}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -908,9 +924,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 11, \"value\":\""+localStorage.ftpPwd+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 11, "value": localStorage.ftpPwd}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -944,9 +961,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 14, \"value\":\""+localStorage.otaAuto+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 14, "value": localStorage.otaAuto}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -980,9 +998,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 15, \"value\":\""+localStorage.otaUpdate+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 15, "value": localStorage.otaUpdate}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -1016,9 +1035,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 38, \"value\":\""+localStorage.mqttServ+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 38, "value": localStorage.mqttServ}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -1052,9 +1072,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 39, \"value\":\""+localStorage.mqttPort+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 39, "value": localStorage.mqttPort}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -1088,9 +1109,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 40, \"value\":\""+localStorage.mqttUser+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 40, "value": localStorage.mqttUser}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -1124,9 +1146,10 @@
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
-					"data": "{\"command\": 41, \"value\":\""+localStorage.mqttPwd+"\"}",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 41, "value": localStorage.mqttPwd}),
 					error: function(){
 						$('#loadscn').hide();
 					}
@@ -1155,13 +1178,15 @@
         }
 
         function send_reboot() {
-			console.log('mode');
+			console.log('reboot');
 			if (localStorage.type == 'MS') {
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "http://192.168.1.1:7878/config",
+					"url": "http://192.168.4.1:7878/config",
 					"method": "POST",
+					"headers": {"Content-Type": "application/json"},
+					"data": JSON.stringify({"command": 4, "value": 0}),
 					"data": "{\"command\": 4, \"value\":\"0\"}",
 					error: function(){
 						$('#loadscn').hide();
