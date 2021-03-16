@@ -285,7 +285,7 @@
 								data = JSON.parse(data);
 
 							if (!data == "" ){
-								// console.log("data : ",data);
+								console.log("data : ",data);
 								localStorage.setItem("ssid_wifi", data.ssid);
 								localStorage.setItem("ssid_pwd_wifi", data.ssid_pass);
 								localStorage.setItem("storage_address", data.str_addr);
@@ -383,7 +383,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_password();
+					// send_password();
+					setTimeout(send_password(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -421,7 +422,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_interval();
+					// send_interval();
+					setTimeout(send_interval(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -459,7 +461,8 @@
 				console.log(response);
 				if(response.RSLT == "OK"){
 					// send_rtsc();
-					send_storage_add();
+					// send_storage_add();
+					setTimeout(send_storage_add(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -533,7 +536,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_storage_path();
+					// send_storage_path();
+					setTimeout(send_storage_path(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -571,7 +575,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_prefix();
+					// send_prefix();
+					setTimeout(send_prefix(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -609,7 +614,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_mode();
+					// send_mode();
+					setTimeout(send_mode(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -649,9 +655,11 @@
 				console.log(wifi_mode);
 				if(response.RSLT == "OK"){
 					if (wifi_mode == 1) {
-						send_reboot();
+						// send_ntpServ();
+						setTimeout(send_ntpServ(), 3000);
 					} else {
-						send_ipaddress();
+						// send_ipaddress();
+						setTimeout(send_ipaddress(), 3000);
 					}
 				} else {
 		 			$('#loadscn').hide();
@@ -800,7 +808,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_ftpServ();
+					// send_ftpServ();
+					setTimeout(send_ftpServ(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -837,7 +846,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_ftpPort();
+					// send_ftpPort();
+					setTimeout(send_ftpPort(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -874,7 +884,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_ftpUser();
+					// send_ftpUser();
+					setTimeout(send_ftpUser(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -911,7 +922,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_ftpPwd();
+					// send_ftpPwd();
+					setTimeout(send_ftpPwd(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -948,7 +960,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_otaAuto();
+					// send_otaAuto();
+					setTimeout(send_otaAuto(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -985,7 +998,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_otaUpdate();
+					// send_otaUpdate();
+					setTimeout(send_otaUpdate(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -1022,7 +1036,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_mqttServ();
+					// send_mqttServ();
+					setTimeout(send_mqttServ(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -1059,7 +1074,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_mqttPort();
+					// send_mqttPort();
+					setTimeout(send_mqttPort(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -1096,7 +1112,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_mqttUser();
+					// send_mqttUser();
+					setTimeout(send_mqttUser(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -1133,7 +1150,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_mqttPwd();
+					// send_mqttPwd();
+					setTimeout(send_mqttPwd(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
@@ -1170,7 +1188,8 @@
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 				if(response.RSLT == "OK"){
-					send_reboot();
+					// send_reboot();
+					setTimeout(send_reboot(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
