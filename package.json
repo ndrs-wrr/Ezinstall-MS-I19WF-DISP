@@ -1,6 +1,6 @@
 {
   "name": "com.app.ezinstall_101",
-  "displayName": "Ezinstall-101",
+  "displayName": "Ezinstall-IAQ",
   "version": "1.0.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",

@@ -14,7 +14,7 @@
         <param name="android-package" value="wifiwizard2.WifiWizard2" />
         <param name="onload" value="true" />
     </feature>
-    <name>Ezinstall-101</name>
+    <name>Ezinstall-IAQ</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>

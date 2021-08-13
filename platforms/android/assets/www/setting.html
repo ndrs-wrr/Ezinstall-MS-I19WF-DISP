@@ -175,7 +175,7 @@
 		        var ftpPort 		= $(".ftpPort").val();
 		        var ftpUser 		= $(".ftpUser").val();
 				var ftpPwd 			= $(".ftpPwd").val();
-				var otaAuto 		= $(".otaAuto").val();
+				// var otaAuto 		= $(".otaAuto").val();
 				var otaUpdate 		= $(".otaUpdate").val();
 		        var mqttServ 		= $(".mqttServ").val();
 		        var mqttPort 		= $(".mqttPort").val();
@@ -198,7 +198,7 @@
 				localStorage.setItem("ftpPort", ftpPort);
 				localStorage.setItem("ftpUser", ftpUser);
 				localStorage.setItem("ftpPwd", ftpPwd);
-				localStorage.setItem("otaAuto", otaAuto);
+				// localStorage.setItem("otaAuto", otaAuto);
 				localStorage.setItem("otaUpdate", otaUpdate);
 				localStorage.setItem("mqttServ", mqttServ);
 				localStorage.setItem("mqttPort", mqttPort);
@@ -299,7 +299,7 @@
 								localStorage.setItem("ftpPort", data.ftpPort);
 								localStorage.setItem("ftpUser", data.ftpUser);
 								localStorage.setItem("ftpPwd", data.ftpPwd);
-								localStorage.setItem("otaAuto", data.otaAuto);
+								// localStorage.setItem("otaAuto", data.otaAuto);
 								localStorage.setItem("otaUpdate", data.otaUpdate);
 								localStorage.setItem("mqttServ", data.mqttServ);
 								localStorage.setItem("mqttPort", data.mqttPort);
@@ -322,7 +322,7 @@
 								$(".ftpPort").val(localStorage.ftpPort);
 								$(".ftpUser").val(localStorage.ftpUser);
 								$(".ftpPwd").val(localStorage.ftpPwd);
-								$(".otaAuto").val(localStorage.otaAuto);
+								// $(".otaAuto").val(localStorage.otaAuto);
 								$(".otaUpdate").val(localStorage.otaUpdate);
 								$(".mqttServ").val(localStorage.mqttServ);
 								$(".mqttPort").val(localStorage.mqttPort);
@@ -961,50 +961,51 @@
 				console.log(response);
 				if(response.RSLT == "OK"){
 					// send_otaAuto();
-					setTimeout(send_otaAuto(), 3000);
-				} else {
-		 			$('#loadscn').hide();
-				}
-			});
-		}
-		
-		function send_otaAuto() {
-			console.log('otaAuto');
-			if (localStorage.type == 'MS') {
-				var settings = {
-					"async": true,
-					"crossDomain": true,
-					"url": "http://192.168.4.1:7878/config",
-					"method": "POST",
-					"headers": {"Content-Type": "application/json"},
-					"data": JSON.stringify({"command": 14, "value": localStorage.otaAuto}),
-					error: function(){
-						$('#loadscn').hide();
-					}
-				}
-			} else if(localStorage.type == 'EMU') {
-				var settings = {
-					"async": true,
-					"crossDomain": true,
-					"url": "http://192.168.4.1:7878/config",
-					"method": "POST",
-				  	// "headers": {"EMU-CMD": "{\"command\": 14, \"value\":\""+localStorage.otaAuto+"\"}"}
-					"data": "{\"command\": 14, \"value\":\""+localStorage.otaAuto+"\"}",
-					error: function(){
-						$('#loadscn').hide();
-					}
-				}
-			}
-			$.ajax(settings).done(function (response) {
-				console.log(response);
-				if(response.RSLT == "OK"){
-					// send_otaUpdate();
+					// setTimeout(send_otaAuto(), 3000);
 					setTimeout(send_otaUpdate(), 3000);
 				} else {
 		 			$('#loadscn').hide();
 				}
 			});
 		}
+		
+		// function send_otaAuto() {
+		// 	console.log('otaAuto');
+		// 	if (localStorage.type == 'MS') {
+		// 		var settings = {
+		// 			"async": true,
+		// 			"crossDomain": true,
+		// 			"url": "http://192.168.4.1:7878/config",
+		// 			"method": "POST",
+		// 			"headers": {"Content-Type": "application/json"},
+		// 			"data": JSON.stringify({"command": 14, "value": localStorage.otaAuto}),
+		// 			error: function(){
+		// 				$('#loadscn').hide();
+		// 			}
+		// 		}
+		// 	} else if(localStorage.type == 'EMU') {
+		// 		var settings = {
+		// 			"async": true,
+		// 			"crossDomain": true,
+		// 			"url": "http://192.168.4.1:7878/config",
+		// 			"method": "POST",
+		// 		  	// "headers": {"EMU-CMD": "{\"command\": 14, \"value\":\""+localStorage.otaAuto+"\"}"}
+		// 			"data": "{\"command\": 14, \"value\":\""+localStorage.otaAuto+"\"}",
+		// 			error: function(){
+		// 				$('#loadscn').hide();
+		// 			}
+		// 		}
+		// 	}
+		// 	$.ajax(settings).done(function (response) {
+		// 		console.log(response);
+		// 		if(response.RSLT == "OK"){
+		// 			// send_otaUpdate();
+		// 			setTimeout(send_otaUpdate(), 3000);
+		// 		} else {
+		//  			$('#loadscn').hide();
+		// 		}
+		// 	});
+		// }
 		
 		function send_otaUpdate() {
 			console.log('otaUpdate');
@@ -1517,7 +1518,7 @@
 				</div>
 			</div>
 			</br>
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-xs-4" style="font-size: 20px ;">
 					OTA Auto Update
 				</div>
@@ -1525,7 +1526,7 @@
 					<input type="text" class="form-control otaAuto" style="width: 220px;" >
 				</div>
 			</div>
-			</br>
+			</br> -->
 			<div class="row">
 				<div class="col-xs-4" style="font-size: 20px ;">
 					OTA Update HR
